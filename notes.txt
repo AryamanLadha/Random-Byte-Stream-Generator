@@ -1,0 +1,54 @@
+Timing the implementation:
+
+time dd if=/dev/urandom ibs=8192 obs=8192 count=16384 >/dev/null
+Output:
+
+    6384+0 records in
+    16384+0 records out
+    134217728 bytes (134 MB, 128 MiB) copied, 0.87225 s, 154 MB/s
+
+    real    0m0.878s
+    user    0m0.025s
+    sys     0m0.849s
+
+time ./randall 134217728 >/dev/null
+Output:
+
+    real    0m3.747s
+    user    0m3.731s
+    sys     0m0.014s
+
+time ./randall 133562368 | cat >/dev/null
+Output:
+    real    0m3.315s
+    user    0m3.280s
+    sys     0m0.190s
+
+time ./randall -i /dev/urandom 133562368 | cat >/dev/null
+Output:
+
+    real    0m2.789s
+    user    0m1.922s
+    sys     0m1.027s
+
+time ./randall -i mrand48_r 133562368 | cat >/dev/null
+Output:
+    real    0m1.739s
+    user    0m1.723s
+    sys     0m0.174s
+
+
+time ./randall -i rdrand 133562368 | cat >/dev/null
+Output:
+    real    0m3.322s
+    user    0m3.277s
+    sys     0m0.204s
+
+
+time ./randall -i mrand48_r -o 100 133562368 | cat >/dev/null
+Output:
+    real    0m0.492s
+    user    0m0.379s
+    sys     0m0.130s
+
+This is probably the fastest combination.
